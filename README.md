@@ -1,5 +1,8 @@
 # Connect Four
 
+** Quick start note: **
+If using a larger board, set minimax depth low (to 3 or 4).
+
 ![](./assets/img/connect4-regular.png)
 Gameplay image on standard board
 
