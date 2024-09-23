@@ -27,13 +27,30 @@ class Board():
         return "\n".join(lines)
     
     def set_board_position(self, array, move_number):
-    # for testing purposes
+    """For testing purposes: set board position to a passed-in array.
+    Args:
+        self
+        array: the board position to be set
+        move_number: the move number to be set
+
+    Returns:
+        none, updates boards position
+    """
         self.num_rows = len(array)
         self.num_columns = len(array[0])
         self.board = array
         self.move_number = move_number
     
     def is_valid_move(self, target_column):
+        """For testing purposes: set board position to a passed-in array.
+        Args:
+            self
+            target_column: the column index to check
+
+        Returns:
+            True, if that column has an empty space for a piece to be placed
+            False, otherwise
+        """
         if target_column<0 or target_column >=self.num_columns:
             return False
         elif self.board[0][target_column] != 0:
@@ -57,6 +74,15 @@ class Board():
         return self.board[row][column]
     
     def place_piece(self, column):
+        """ Places piece in column
+        Args:
+            self
+            column: the column index to place the piece
+
+        Returns:
+            Nothing, places the piece in target column if possible.
+            If the move is invalid, it does not place a piece.
+        """
         if self.next_player_to_move() == Player_ID.PLAYER_1:
             piece = 1
         else:
@@ -71,14 +97,26 @@ class Board():
         return
         
     def lowest_unoccupied_row(self, column):
-        # returns the row of the lowest open slot in that column, or returns -1 if that column is full
+        """ Returns row index of lowest open slot in target column, or returns -1 if that column is full
+        Args:
+            self
+            column: the column index to place the piece
+        """
         for row in range(self.num_rows-1,-1,-1):
                 if self.get_piece(row, column) == 0:
                     return row
         return -1
 
     def game_over_eval(self):
+        """ Checks if game is over
+        Args:
+            self
 
+        Returns:
+            Status of game- GameOver.WIN_FOR_1, GameOver.WIN_FOR_2, 
+                            GameOver.DRAWN, or GameOver.NOT_OVER
+        """
+    
         pos_diagonals = self.get_positive_diagonals()
         neg_diagonals = self.get_negative_diagonals()
         columns = self.get_columns()
@@ -102,6 +140,14 @@ class Board():
         return GameOver.NOT_OVER
   
     def contains_4_in_a_row(self, line):
+        """ Checks if given line contains 4 in a row
+        Args:
+            line - an 1-dimensional array representing one row, column, or diagonal of the board
+
+        Returns:
+            If connect4 exists: GameOver.WIN_FOR_1 or GameOver.WIN_FOR_2
+            Else, returns GameOver.NOT_OVER
+        """
         if len(line) <=3: 
             return GameOver.NOT_OVER
         last_spot = 0
@@ -224,6 +270,9 @@ class Game():
         return
     
     def make_evaluation_table(self):
+        """ Creates a new row x column array used to evaluate a position
+        Each spot is given a value based on the number of connect 4 lines it can participate in.
+        """
         table = [[0]*self.num_columns for _ in range(self.num_rows)]
         for i in range(self.num_rows):
             for j in range(self.num_columns):
@@ -261,7 +310,13 @@ class Game():
         return table
     
     def make_move(self, target_column):
+        """ Makes move on board
+        Args:
+            target_column: column move is to be played in
 
+        Returns:
+            None; plays move on board, checks if game is over.
+        """
         if self.board.is_valid_move(target_column):
             # play move in board
             self.board.place_piece(target_column)
@@ -288,7 +343,17 @@ class Game():
         return move
     
     def estimate_position_eval(self, board):
-    # this is a function of the computer player
+        """ Estimates position using evaluation table
+        Args:
+            board: a hypothetical board position
+
+        Returns:
+            score: an integer that estimates the whether the position is better for player 1 (positive) or 
+            player 2 (negative), and an estimate of how "winning" it is (magnitude)
+
+            score is the sum of the evaluation_table values of player 1's pieces minus
+            the sum of the evaluation_table values of player 2's pieces
+        """
         score = 0
         for row in range(self.num_rows):
             for col in range(self.num_columns):
@@ -384,6 +449,17 @@ class Game():
         return
 
     def minimax(self, board: Board, alpha, beta, depth = None, first_call=False):
+        """ Minimax algorithm to choose a move
+        Args:
+            board: a given board position
+            alpha: evaluation to be used in alpha-beta pruning
+            beta: evaluation to be used in alpha-beta pruning
+            depth: the remaining number of recursive levels to check
+            first_call: whether this is the first call of the algorithm
+
+        Returns:
+            evaluation, move: the best move according to the algorithm and its corresponding evaluation
+        """
 
         if depth is None:
             depth = self.minimax_depth
