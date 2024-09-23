@@ -29,7 +29,6 @@ class Board():
     def set_board_position(self, array, move_number):
     """For testing purposes: set board position to a passed-in array.
     Args:
-        self
         array: the board position to be set
         move_number: the move number to be set
 
@@ -44,7 +43,6 @@ class Board():
     def is_valid_move(self, target_column):
         """For testing purposes: set board position to a passed-in array.
         Args:
-            self
             target_column: the column index to check
 
         Returns:
@@ -76,7 +74,6 @@ class Board():
     def place_piece(self, column):
         """ Places piece in column
         Args:
-            self
             column: the column index to place the piece
 
         Returns:
@@ -99,7 +96,6 @@ class Board():
     def lowest_unoccupied_row(self, column):
         """ Returns row index of lowest open slot in target column, or returns -1 if that column is full
         Args:
-            self
             column: the column index to place the piece
         """
         for row in range(self.num_rows-1,-1,-1):
@@ -109,9 +105,6 @@ class Board():
 
     def game_over_eval(self):
         """ Checks if game is over
-        Args:
-            self
-
         Returns:
             Status of game- GameOver.WIN_FOR_1, GameOver.WIN_FOR_2, 
                             GameOver.DRAWN, or GameOver.NOT_OVER
